@@ -104,17 +104,24 @@ router.post('/', passport.authenticate('jwt', {
 
 });
 
-// @route : api/profile/handle/:handle
-// @desc : Get user profile by handle
-// @access : public
+// @route   GET api/profile/all
+// @desc    Get all profiles
+// @access  Public
 router.get('/all', (req, res) => {
+    let errors = {};
+  
     Profile.find()
-        .populate('user', ['name', 'avatar'])
-        .then(profile => {
-            res.json(profile)
-        })
-        .catch(err => console.log(err))
-})
+            .populate('user', ['name', 'avatar'])
+            .then(profiles => {
+                if (!profiles) {
+                errors.noprofile = 'There are no profiles';
+                return res.status(404).json(errors);
+                }
+        
+                res.json(profiles);
+            })
+            .catch(err => res.status(404).json({ profile: 'There are no profiles' }));
+  });
 
 // @route : api/profile/handle/:handle
 // @desc : Get user profile by handle
@@ -176,7 +183,7 @@ router.post('/experience', passport.authenticate('jwt', {
                 company: req.body.company,
                 location: req.body.location,
                 from: req.body.from,
-                to: req.body.from,
+                to: req.body.to,
                 current: req.body.current,
                 description: req.body.description
             }
@@ -257,7 +264,7 @@ router.delete('/experience/:exp_id', passport.authenticate('jwt', {
         .catch(err => res.status(400).json(err))
 });
 
-router.delete('/profile/user/:user_id', passport.authenticate('jwt', {
+router.delete('/', passport.authenticate('jwt', {
     session: false
 }), (req, res) => {
     Profile.findOneAndRemove({

@@ -17,7 +17,7 @@ module.exports = function validateEducation(data) {
         errors.degree = "Please enter the name of degree"
     }
     if (Validator.isEmpty(data.fieldofstudy)) {
-        errors.fieldofstudy = "Please enter the name of degree"
+        errors.fieldofstudy = "Please mention field of study"
     }
     if (Validator.isEmpty(data.from)) {
         errors.from = "Please enter the date you started the school"

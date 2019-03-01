@@ -99,7 +99,7 @@ router.post('/like/:post_id', passport.authenticate('jwt', {
         .then(profile => {
             Post.findById(req.params.post_id)
                 .then(post => {
-                    if (post.likes.filter(like => like.user.toString() === req.user.id) > 0) {
+                    if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0 ) {
                         return res.json({
                             liked: "You've already liked this post"
                         })
