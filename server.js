@@ -31,6 +31,13 @@ app.use('/api/user/', userRoutes);
 app.use('/api/post/', postRoutes);
 app.use('/api/profile', profileRoutes);
 
+// Static assets to be consumed by server in PRODUCTION mode
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+    app.get('*', (req,res) => {
+        res.sendFile(__dirname, 'client','build','index.html');
+    })
+}
 
 const port = process.env.PORT || '3000';
 app.listen(port, () => {
